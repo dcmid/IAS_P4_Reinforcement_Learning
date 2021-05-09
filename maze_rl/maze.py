@@ -57,11 +57,11 @@ class Maze():
         self.cell2idx = {(1, 2): 7, (0, 0): 0, (3, 3): 11, (3, 0): 2, (3, 1): 5, (2, 1): 4, 
             (0, 2): 6, (1, 3): 9, (2, 3): 10, (1, 4): 13, (2, 2): 8, (0, 4): 12, (1, 0): 1, (1, 1): 3}
     
-    def step(self,state,action):
+    def step(self,state,action,slip_ena=True):
         # Input: the current state and action IDs
         # Output: reward, the next state ID, done (episodic terminal boolean value)
 
-        if np.random.rand() < self.slip:
+        if slip_ena and (np.random.rand() < self.slip):
             a = ACTMAP[action]
         else:
             a = action
