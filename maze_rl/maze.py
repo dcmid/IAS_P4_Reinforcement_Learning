@@ -130,6 +130,19 @@ class Maze():
         print("action: ", ["UP","DOWN","LEFT","RIGHT"][action] if action is not None else None)
         print("\n".join("".join(row) for row in desc))
 
+def run_maze(policy, env=Maze(), max_steps=100):
+    state = env.reset()
+    env.plot(state, None)
+    step = 0
+    done = False
+    while (not done) and (step < max_steps):
+        step += 1
+        action = np.argmax(policy[state])
+        reward, state, done = env.step(state, action)
+        env.plot(state, action)
+        if (done):
+            print("Reward:",reward)
+
 ### Simple Testing code added by Travers
 if __name__ == '__main__':
     maze = Maze()
