@@ -2,8 +2,12 @@
 
 import numpy as np
 
-def get_action_egreedy(values ,epsilon):
-	# Implement epsilon greedy action policy
+def get_action_egreedy(values, epsilon):
+	if(np.random.rand() > epsilon):
+		action = np.argmax(values)   					# return policy action with prob 1-epsilon
+	else:
+		action = np.random.choice(range(len(values)))	# else return random action
+	return action
 	NotImplementedError
 
 def evaluation(env, Q_table, step_bound = 100, num_itr = 10):
