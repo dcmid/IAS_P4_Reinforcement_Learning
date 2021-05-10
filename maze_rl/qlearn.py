@@ -10,12 +10,12 @@ def update_q(q_table, state, action, n_state, reward, learning_rate=0.5, discoun
     new_q = (1- learning_rate) * curr_q + learning_rate * scaled_next_q
     return new_q
 
-def update_epsilon(epsilon, state_count, eps_n, min_eps):
+def get_epsilon(state_count, eps_n, min_eps):
     n_epsilon = eps_n / (eps_n + state_count)
     return max(n_epsilon, min_eps)
 
 
-def qlearn(env=Maze(), learning_rate=0.5, eps_n=100, min_eps=0.01, max_runs=100, max_iter=1000):
+def qlearn(env=Maze(), learning_rate=0.5, eps_n=1000, min_eps=0.01, num_runs=100, max_iter=5000, pause_interval=50):
     """ executes q learning on environment
     
         Args:
@@ -34,27 +34,28 @@ def qlearn(env=Maze(), learning_rate=0.5, eps_n=100, min_eps=0.01, max_runs=100,
 
     state_counts = np.zeros(env.snum)       # number of times each state has been visited
     q_table = np.zeros((env.snum,env.anum))
-    epoch = 0
-    training_done = False
-    while not training_done:
-        i = 0
+    for run in range(num_runs):
         run_done = False
-        while (not run_done) and (i < max_iter):
-            state_counts[state] += 1                                                        # update state count of current state
+        pause    = False
+        while (not run_done) and (not pause):
+            epsilon = get_epsilon(state_counts[state], eps_n, min_eps)                      # get epsilon for current state
             action = get_action_egreedy(q_table[state], epsilon)                            # get action
             n_state, reward, run_done = env.step(action)                                    # execute action and get reward/next state
             q_table = update_q(q_table, state, action, n_state, reward, learning_rate=0.5)  # update q-table
+            
+            state_counts[state] += 1                                                        # update state count
+            state = n_state                                                                 # update state
             i += 1
+            if (i >= max_iter):                                                             # stop run if max_iter reached
+                run_done = True
+            elif (i % pause_interval == 0):                                                 # pause every pause_interval iterations
+                pause = True
 
-
+        if (run_done = True):  # if run done, reset iter and state
+            i = 0
+            state = env.reset()
 
         avg_step, avg_reward = evaluation(env, q_table) 
         eval_steps.append(avg_step) 
         eval_reward.append(avg_reward)
-
-
-# # Plot example # 
-# f1, ax1 = plt.subplots() 
-# ax1.plot(np.arange(0,5000,50),eval_steps) #repeat for different algs. 
-# f2, ax2 = plt.subplots() 
-# ax2.plot(np.arange(0,5000,50),eval_reward) #repeat for different algs.
+    return [eval_steps, eval_reward]
