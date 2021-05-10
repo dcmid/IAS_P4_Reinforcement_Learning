@@ -39,11 +39,11 @@ def qlearn(env=Maze(), learning_rate=0.5, eps_n=1000, min_eps=0.01, num_runs=100
         run_done = False
         while (not run_done):
             epsilon = get_epsilon(state_counts[state], eps_n, min_eps)                          # get epsilon for current state
-            print(epsilon)
+            # print(epsilon)
             action = get_action_egreedy(q_table[state], epsilon)                                # get action
             reward, n_state, run_done = env.step(state, action)                                 # execute action and get reward/next state
             q_table[state,action] = update_q(q_table, state, action, n_state, reward, 
-                                             learning_rate=0.5, discount_fact=discount_fact)   # update q-table
+                                             learning_rate=0.5, discount_fact=discount_fact)    # update q-table
             
             state_counts[state] += 1                                                            # update state count
             state = n_state                                                                     # update state

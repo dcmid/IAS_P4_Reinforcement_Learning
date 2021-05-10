@@ -6,7 +6,7 @@ def get_action_egreedy(values, epsilon):
 	if(np.random.rand() > epsilon):
 		action = np.argmax(values)   					# return policy action with prob 1-epsilon
 	else:
-		print("random")
+		# print("random")
 		action = np.random.choice(range(len(values)))	# else return random action
 	return action
 	NotImplementedError
