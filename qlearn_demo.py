@@ -11,8 +11,14 @@ def main():
     # # Plot example # 
     f1, ax1 = plt.subplots() 
     ax1.plot(np.arange(0,NUM_RUNS,50),eval_steps) #repeat for different algs. 
+    ax1.set_xlabel('epoch')
+    ax1.set_ylabel('steps')
+    ax1.set_title('Steps to Completion')
     f2, ax2 = plt.subplots() 
     ax2.plot(np.arange(0,NUM_RUNS,50),eval_reward) #repeat for different algs.
+    ax2.set_xlabel('epoch')
+    ax2.set_ylabel('reward')
+    ax2.set_title('Reward Evolution')
     plt.show()
 
 if __name__ == '__main__':
