@@ -13,12 +13,12 @@ class MyNN():
   """
   def __init__(self, env, activation_func = nn.GELU()):
     self.n_inputs = env.observation_space.shape[0]  # number of inputs equal to length of observation vector
-    self.n_outputs = env.action_space.n         # number of outputs equal to length of action vector
+    self.n_outputs = env.action_space.n             # number of outputs equal to length of action vector
 
     self.layers = nn.Sequential(
-      nn.Linear(self.n_inputs,16),
+      nn.Linear(self.n_inputs,64),
       activation_func,
-      nn.Linear(16,self.n_outputs),
+      nn.Linear(64,self.n_outputs),
       nn.Softmax(dim=-1)
     )
 
@@ -50,7 +50,14 @@ def get_loss(log_probs, rewards):
 
 # REIFORCE ----------------------------------------------------------------------------------------------------
 
-def reinforce(env, n_episodes=1000, discount_rate=0.9, learning_rate=0.01, pickle_path=None):
+def reinforce(env, opts):
+  """ executes REINFORCE on given environment with specified options
+  """
+  n_episodes = opts['n_episodes']
+  discount_rate = opts['discount_rate']
+  learning_rate = opts['learning_rate']
+  cluster_size = opts['cluster_size']
+
   policy_estimator = MyNN(env)
   optimizer = optim.Adam(policy_estimator.layers.parameters(),lr=learning_rate)
   actions = np.arange(env.action_space.n) # all possible actions
@@ -64,11 +71,12 @@ def reinforce(env, n_episodes=1000, discount_rate=0.9, learning_rate=0.01, pickl
     log_probs = []
     done = False
     step = 0
-    while not done:                                                   # loop until episode is done
-      p_actions = policy_estimator.predict(state)    # get probability vector for actions
-      action = np.random.choice(actions, p=p_actions.detach().numpy())               # sample from actions w/ probability vector
-      log_prob = torch.log(p_actions[action])                       # calculate log prob of action that was taken
-      n_state, reward, done, _ = env.step(action)                   # execute action on environment
+    while not done:                                                       # loop until episode is done
+      if step % cluster_size == 0:
+        p_actions = policy_estimator.predict(state)                       # get probability vector for actions
+        action = np.random.choice(actions, p=p_actions.detach().numpy())  # sample from actions w/ probability vector
+        log_prob = torch.log(p_actions[action])                           # calculate log prob of action that was taken
+      n_state, reward, done, _ = env.step(action)                         # execute action on environment
       
       states.append(state)
       rewards.append(reward)
@@ -101,8 +109,8 @@ def show_sim(env, policy_estimator):
   actions = np.arange(env.action_space.n) # all possible actions
   done = False
   while not done:
-    p_actions = policy_estimator.predict(state)                         # get probability vector for actions
-    action = np.random.choice(actions, p=p_actions.detach().numpy())    # sample from actions w/ probability vector
+    p_actions = policy_estimator.predict(state)                       # get probability vector for actions
+    action = np.random.choice(actions, p=p_actions.detach().numpy())  # sample from actions w/ probability vector
     state, _, done, _ = env.step(action)                              # execute action on environment
     env.render()
     sleep(0.1)
