@@ -85,7 +85,7 @@ def reinforce(env, opts):
       state = n_state
       step += 1
 
-    total_rewards.append(sum(rewards))        
+    total_rewards.append(sum(rewards))
 
     disc_rewards = apply_discount(rewards, discount_rate)           # calculate discounted rewards
     disc_rewards_norm = (disc_rewards - np.mean(disc_rewards))\

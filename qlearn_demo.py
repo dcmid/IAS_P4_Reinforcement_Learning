@@ -7,7 +7,7 @@ def main():
     NUM_RUNS = 500
     env = Maze()
     eval_steps, eval_reward = qlearn(env=env, learning_rate=0.1, eps_n=1000, min_eps=0.01, 
-                                     num_runs=NUM_RUNS, max_iter=500, pause_interval=50, discount_fact=0.98)
+                                     num_runs=NUM_RUNS, max_iter=500, pause_interval=50, discount_fact=0.95)
     # # Plot example # 
     f1, ax1 = plt.subplots() 
     ax1.plot(np.arange(0,NUM_RUNS,50),eval_steps) #repeat for different algs. 

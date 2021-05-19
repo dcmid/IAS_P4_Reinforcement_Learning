@@ -28,7 +28,7 @@ def qlearn(env=Maze(), learning_rate=0.5, eps_n=1000, min_eps=0.01, num_runs=100
             max_iter:       max iterations without finishing before run exits
 
 
-     """
+    """
     eval_steps , eval_reward = [], []
     state = env.reset()
 

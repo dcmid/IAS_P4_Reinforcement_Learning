@@ -24,3 +24,30 @@ python qlearn_demo.py
 ```
 
 ## 3. Continuous State Space
+
+### REINFORCE
+To execute demo:
+```
+python reinforce_demo.py -m (for mountaincar)
+python reinforce_demo.py -a (for acrobot)
+```
+
+### Discretized Q-Learning
+To execute demo:
+```
+python gym_qlearn_demo.py -m (for mountaincar)
+python qym_qlearn_demo.py -a (for acrobot)
+```
+
+## Packages
+The code for this project is organized into two packages, *maze_rl* and *gym_rl*, corresponding 
+to the Maze and OpenAI Gym problems, respectively.
+### maze_rl
+Code for value iteration is located in the *value_iter.py* module.
+
+Code for q-learning is located in the *qlearn.py* module.
+
+### gym_rl
+Code for REINFORCE is located in the *reinforce.py* module.
+
+Code  for q-learning is located in the *qlearn.py* module.
