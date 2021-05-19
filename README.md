@@ -3,7 +3,7 @@ Link to GitHub repo: https://github.com/dcmid/IAS_P4_Reinforcement_Learning
 
 This repository includes package support and demo file 
 for each of the 3 challenges in this project. Challenges 
-1 and 2 use the maze_rl package.
+1 and 2 use the *maze_rl* package. Challenge 3 uses the *gym_rl* package.
 
 The demos can be executed directly from the root directory.
 
